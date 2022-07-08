@@ -1,0 +1,12 @@
+{
+    "name": "VennDiagram",
+    "description": "Extension",
+    "icon": "extension",
+    "type": "visualization",
+    "version": "1.0.0",
+    "author": "Artur Trautenmuller",
+    "keywords": "qlik-sense, visualization, clock",
+    "dependencies": {
+        "qlik-sense": ">=3.0.x"
+    }
+}
