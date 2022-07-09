@@ -32,9 +32,11 @@ If only two products exists in the dataset or there are 2 products selected, the
 ![image](https://user-images.githubusercontent.com/39464553/178123919-94826c2f-ce69-4799-a876-ef0a3bdaecc3.png)
 
 If you want to display the quantity of sold products rather the quantity of clients that bought that product, create a measure 'sum(Qtde)'.
+
 ![image](https://user-images.githubusercontent.com/39464553/178124031-68c0a8bb-6aff-4c8b-8246-0038b2fbf51c.png)
 
 Now the Diagram will display the quantity of sold products.
+
 ![image](https://user-images.githubusercontent.com/39464553/178124043-98866bbd-b266-4f77-a5e5-c5af9dbfe9b2.png)
 
 
