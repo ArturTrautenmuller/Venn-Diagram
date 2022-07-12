@@ -7,13 +7,17 @@ define( ["qlik", "css!./VennDiagram.css"],
 
   return {
     initialProperties: {
+			
             qHyperCubeDef: {
                 qDimensions: [],
                 qMeasures: [],
                 qInitialDataFetch: [{
+					qTop:0,
+					qLeft:0,
                     qWidth: 3,
                     qHeight: 3300
-                }]
+                }
+				]
             }
         },
     definition: {
@@ -30,6 +34,21 @@ define( ["qlik", "css!./VennDiagram.css"],
                     min: 0,
                     max: 1
                 },
+			addons: { 
+
+    			 uses: "addons", 
+
+   				  items: { 
+
+       				   dataHandling: { 
+
+           			    uses: "dataHandling" 
+
+         			 }
+
+    			 }
+
+			} ,   
 			appearancePanel:{
 				uses: "settings",
 				items:{
@@ -88,6 +107,21 @@ define( ["qlik", "css!./VennDiagram.css"],
 									type: "number",
 									label: "Border Width",
 									defaultValue: 1
+								},
+								MySwitchProp: {
+									type: "boolean",
+									component: "switch",
+									label: "Use Mean in Itersections",
+									ref: "mean",
+									options: [{
+										value: true,
+										label: "Yes"
+									}, {
+										value: false,
+										label: "No"
+									}],
+
+									defaultValue: false
 								}
 					
 						
@@ -332,7 +366,13 @@ define( ["qlik", "css!./VennDiagram.css"],
 			
 			for(var i = 0; i < Venn.length; i++){
 				if(considerValue){
-					Venn[i].total = Venn[i].sum();
+					if(layout.mean){
+						Venn[i].total = Venn[i].sum()/Venn[i].alias.length;
+					}
+					else{
+						Venn[i].total = Venn[i].sum();
+					}
+					
 				}
 				else{
 					Venn[i].total = Venn[i].count();
