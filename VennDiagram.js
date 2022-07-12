@@ -149,6 +149,32 @@ define( ["qlik", "css!./VennDiagram.css"],
 			return x*talestep; 
 		}
 		
+		function pixelX(x){
+			cWidth = c.offsetWidth;
+			cHeight = c.offsetHeight;
+
+			var	talesize = 20;
+			var talestep = Math.min(cWidth,cHeight)/talesize;
+			
+			translate = Math.max(0,cWidth - cHeight)/2;
+			
+			
+			return x*talestep + translate - 30; 
+		}
+		
+		function pixelY(x){
+			cWidth = c.offsetWidth;
+			cHeight = c.offsetHeight;
+
+			var	talesize = 20;
+			var talestep = Math.min(cWidth,cHeight)/talesize;
+			
+			translate = Math.max(0,cHeight - cWidth)/2;
+			
+			
+			return x*talestep + translate; 
+		}
+		
 		
 		
 		var considerValue = true;
@@ -388,12 +414,12 @@ define( ["qlik", "css!./VennDiagram.css"],
 				ctx.beginPath();
 				ctx.lineWidth = layout.border_width;
 				ctx.strokeStyle = layout.color_1.color;
-	   			ctx.arc(pixel(10),pixel(9), pixel(6.5), 0, 2 * Math.PI);
+	   			ctx.arc(pixelX(10),pixelY(9), pixel(6.5), 0, 2 * Math.PI);
        	   		ctx.stroke();
 				
 				ctx.beginPath();
 				ctx.strokeStyle = layout.color_2.color;
-	   			ctx.arc(pixel(16),pixel(9), pixel(6.5), 0, 2 * Math.PI);
+	   			ctx.arc(pixelX(16),pixelY(9), pixel(6.5), 0, 2 * Math.PI);
        	   		ctx.stroke();
 				
 				ctx.lineWidth = 1;
@@ -403,17 +429,17 @@ define( ["qlik", "css!./VennDiagram.css"],
 				ctx.beginPath();
 				ctx.lineWidth = layout.border_width;
 				ctx.strokeStyle = layout.color_1.color;
-	   			ctx.arc(pixel(9),pixel(7), pixel(5.5), 0, 2 * Math.PI);
+	   			ctx.arc(pixelX(9),pixelY(7), pixel(5.5), 0, 2 * Math.PI);
        	   		ctx.stroke();
 				
 				ctx.beginPath();
 				ctx.strokeStyle = layout.color_2.color;
-	   			ctx.arc(pixel(15),pixel(7), pixel(5.5), 0, 2 * Math.PI);
+	   			ctx.arc(pixelX(15),pixelY(7), pixel(5.5), 0, 2 * Math.PI);
        	   		ctx.stroke();
 				
 				ctx.beginPath();
 				ctx.strokeStyle = layout.color_3.color;
-	   			ctx.arc(pixel(12),pixel(13.06), pixel(5.5), 0, 2 * Math.PI);
+	   			ctx.arc(pixelX(12),pixelY(13.06), pixel(5.5), 0, 2 * Math.PI);
        	   		ctx.stroke();
 				
 				ctx.lineWidth = 1;
@@ -425,24 +451,24 @@ define( ["qlik", "css!./VennDiagram.css"],
 			if(setList.length == 2){
 				ctx.fillStyle = layout.color_1.color;
 				ctx.font = layout.label_size+"px Arial";
-				ctx.fillText(setList[0].name,pixel(4.5),pixel(2));
+				ctx.fillText(setList[0].name,pixelX(4.5),pixelY(2));
 				
 				ctx.fillStyle = layout.color_2.color;
 				ctx.font = layout.label_size+"px Arial";
-				ctx.fillText(setList[1].name,pixel(17),pixel(2));
+				ctx.fillText(setList[1].name,pixelX(17),pixelY(2));
 			}
 			if(setList.length == 3){
 				ctx.fillStyle = layout.color_1.color;
 				ctx.font = layout.label_size+"px Arial";
-				ctx.fillText(setList[0].name,pixel(3.5),pixel(1));
+				ctx.fillText(setList[0].name,pixelX(3.5),pixelY(1));
 				
 				ctx.fillStyle = layout.color_2.color;
 				ctx.font = layout.label_size+"px Arial";
-				ctx.fillText(setList[1].name,pixel(16),pixel(1));
+				ctx.fillText(setList[1].name,pixelX(16),pixelY(1));
 				
 				ctx.fillStyle = layout.color_3.color;
 				ctx.font = layout.label_size+"px Arial";
-				ctx.fillText(setList[2].name,pixel(17.3),pixel(16));
+				ctx.fillText(setList[2].name,pixelX(17.3),pixelY(16));
 			
 			}
 		}
@@ -455,8 +481,8 @@ define( ["qlik", "css!./VennDiagram.css"],
 				ctx.textAlign = "center";  
 				ctx.fillText(
 					Venn.filter(function (x) { return x.alias == '0' })[0].total,
-					pixel(7),
-					pixel(9)
+					pixelX(7),
+					pixelY(9)
 				);
 				
 				ctx.fillStyle = '#000000';
@@ -464,8 +490,8 @@ define( ["qlik", "css!./VennDiagram.css"],
 				ctx.textAlign = "center";  
 				ctx.fillText(
 					Venn.filter(function (x) { return x.alias == '1' })[0].total,	
-					pixel(19),
-					pixel(9)
+					pixelX(19),
+					pixelY(9)
 				);
 				
 				ctx.fillStyle = '#000000';
@@ -473,8 +499,8 @@ define( ["qlik", "css!./VennDiagram.css"],
 				ctx.textAlign = "center";  
 				ctx.fillText(
 					Venn.filter(function (x) { return x.alias == '01' })[0].total,
-					pixel(13),
-					pixel(9)
+					pixelX(13),
+					pixelY(9)
 				);
 			}
 			if(setList.length == 3){
@@ -483,8 +509,8 @@ define( ["qlik", "css!./VennDiagram.css"],
 				ctx.textAlign = "center";  
 				ctx.fillText(
 					Venn.filter(function (x) { return x.alias == '0' })[0].total,
-					pixel(8),
-					pixel(6)
+					pixelX(8),
+					pixelY(6)
 				);
 				
 				ctx.fillStyle = '#000000';
@@ -492,8 +518,8 @@ define( ["qlik", "css!./VennDiagram.css"],
 				ctx.textAlign = "center";  
 				ctx.fillText(
 					Venn.filter(function (x) { return x.alias == '1' })[0].total,	
-					pixel(16),
-					pixel(6)
+					pixelX(16),
+					pixelY(6)
 				);
 				
 				ctx.fillStyle = '#000000';
@@ -501,8 +527,8 @@ define( ["qlik", "css!./VennDiagram.css"],
 				ctx.textAlign = "center";  
 				ctx.fillText(
 					Venn.filter(function (x) { return x.alias == '2' })[0].total,
-					pixel(12),
-					pixel(13.8)
+					pixelX(12),
+					pixelY(13.8)
 				);
 				
 				ctx.fillStyle = '#000000';
@@ -510,8 +536,8 @@ define( ["qlik", "css!./VennDiagram.css"],
 				ctx.textAlign = "center";  
 				ctx.fillText(
 					Venn.filter(function (x) { return x.alias == '01' })[0].total,
-					pixel(12),
-					pixel(6)
+					pixelX(12),
+					pixelY(6)
 				);
 				
 				ctx.fillStyle = '#000000';
@@ -519,8 +545,8 @@ define( ["qlik", "css!./VennDiagram.css"],
 				ctx.textAlign = "center";  
 				ctx.fillText(
 					Venn.filter(function (x) { return x.alias == '02' })[0].total,	
-					pixel(9.5),
-					pixel(11)
+					pixelX(9.5),
+					pixelY(11)
 				);
 				
 				ctx.fillStyle = '#000000';
@@ -528,8 +554,8 @@ define( ["qlik", "css!./VennDiagram.css"],
 				ctx.textAlign = "center";  
 				ctx.fillText(
 					Venn.filter(function (x) { return x.alias == '12' })[0].total,	
-					pixel(14.5),
-					pixel(11)
+					pixelX(14.5),
+					pixelY(11)
 				);
 				
 				ctx.fillStyle = '#000000';
@@ -537,8 +563,8 @@ define( ["qlik", "css!./VennDiagram.css"],
 				ctx.textAlign = "center";  
 				ctx.fillText(
 					Venn.filter(function (x) { return x.alias == '012' })[0].total,	
-					pixel(12),
-					pixel(9.5)
+					pixelX(12),
+					pixelY(9.5)
 				);
 			}
 		
