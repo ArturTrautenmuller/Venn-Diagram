@@ -1,4 +1,4 @@
-var gen,ss,ss1,ss2,el,ss3;
+var gen,ss,ss1,ss2,el,ss3,ss4,ss5;
 define( ["qlik", "css!./VennDiagram.css"],
 	function ( qlik, template ) {
 
@@ -559,13 +559,13 @@ define( ["qlik", "css!./VennDiagram.css"],
 			for(var i = 0;i < matrix.length;i++){
 				var rowValue;
 				if(considerValue){
-					rowValue = matrix[i][2].qNum
+					rowValue = matrix[i][2]
 				}
 				else{
 					rowValue = 0;
 				}
 			
-				addItemInSet(matrix[i][0].qText,matrix[i][1].qText,rowValue);
+				addItemInSet(matrix[i][0],matrix[i][1],rowValue);
 			
 			}
 			
@@ -577,7 +577,35 @@ define( ["qlik", "css!./VennDiagram.css"],
 			
 		}
 		
-		
+		var TotalData = [];
+		var lastrow = 0, me = this;
+     //loop through the rows we have and render
+     this.backendApi.eachDataRow( function ( rownum, row ) {
+                lastrow = rownum;
+			var newdata = [];
+
+			$.each( row, function ( key, cell ) {
+				if ( cell.qIsOtherCell ) {
+					cell.qText = this.backendApi.getDimensionInfos()[key].othersLabel;
+				}
+				newdata.push(!isNaN( cell.qNum ) ? parseInt(cell.qText, 10) : cell.qText);
+			} );
+			TotalData.push(newdata);
+     });
+     if(this.backendApi.getRowCount() > lastrow +1){
+             //we havent got all the rows yet, so get some more, 1000 rows
+              var requestPage = [{
+                    qTop: lastrow + 1,
+                    qLeft: 0,
+                    qWidth: 3, //should be # of columns
+                    qHeight: Math.min( 1000, this.backendApi.getRowCount() - lastrow )
+                }];
+               this.backendApi.getData( requestPage ).then( function ( dataPages ) {
+                        //when we get the result trigger paint again
+                        me.paint( $element );
+               } );
+     }
+		ss4 = TotalData;
 	
 		var app;
 		app = qlik.currApp(this);
@@ -606,17 +634,56 @@ define( ["qlik", "css!./VennDiagram.css"],
 		
 		
 		
-		ss3 = layout.qHyperCube.qDataPages;
-		var data = layout.qHyperCube.qDataPages[0].qMatrix;
-		var label = layout.qHyperCube.qMeasureInfo;
-		ss = data;
 		
-		if(data[0].length == 2){
+		
+		
+		
+		//var data = layout.qHyperCube.qDataPages[0].qMatrix;
+		var label = layout.qHyperCube.qMeasureInfo;
+		
+		/*qtdRows = this.backendApi.getRowCount();
+		maxPage = Math.floor((qtdRows-3300)/1);
+		console.log(maxPage);
+		
+		for(var i = 0; i <= maxPage;i++){
+			requestPage = [{
+				qTop : 4000,
+				qLeft : 0,
+				qWidth : 3, 
+				qHeight : 100
+			}];
+			
+			console.log(i);
+			try{
+				dataPage = this.backendApi.getData(requestPage);
+				dataPage.then(function(a) {
+  					 data = data.concat(a[0].qMatrix);
+					 console.log(data);
+				});
+				//ss5 = dataPage.$$state.value[0].qMatrix;
+				//data = data.concat(dataPage.$$state.value[0].qMatrix);
+				console.log(dataPage);
+			}
+			catch(err){
+				console.log(err.message);
+			}
+			
+			
+		}
+		*/
+		
+		
+		
+		
+		
+		//ss = data;
+
+		if(TotalData[0].length == 2){
 			considerValue = false;
 		}
 		
 	
-		calculateVenn(data);
+		calculateVenn(TotalData);
 		
 		draw();
 		
