@@ -582,6 +582,7 @@ define( ["qlik", "css!./VennDiagram.css"],
      //loop through the rows we have and render
      this.backendApi.eachDataRow( function ( rownum, row ) {
                 lastrow = rownum;
+				//console.log("rownum: "+rownum);
 			var newdata = [];
 
 			$.each( row, function ( key, cell ) {
@@ -592,8 +593,10 @@ define( ["qlik", "css!./VennDiagram.css"],
 			} );
 			TotalData.push(newdata);
      });
+	// var rowcount = this.backendApi.getRowCount();
      if(this.backendApi.getRowCount() > lastrow +1){
              //we havent got all the rows yet, so get some more, 1000 rows
+			 console.log("rownum: "+lastrow);
               var requestPage = [{
                     qTop: lastrow + 1,
                     qLeft: 0,
@@ -602,9 +605,42 @@ define( ["qlik", "css!./VennDiagram.css"],
                 }];
                this.backendApi.getData( requestPage ).then( function ( dataPages ) {
                         //when we get the result trigger paint again
-                        me.paint( $element );
+						/*var venn_canvas = document.createElement("canvas");
+						venn_canvas.setAttribute("class","venn_canvas_class");
+						var hashId = Math.floor(Math.random() * 100000);
+						venn_canvas.setAttribute("id","venn_canvas"+hashId);
+
+
+						$element.append( venn_canvas );
+
+						var c = document.getElementById("venn_canvas"+hashId);
+
+
+						c.setAttribute("width",c.offsetWidth);
+						c.setAttribute("height",c.offsetHeight);
+
+						var ctx = c.getContext("2d");
+
+						cWidth = c.offsetWidth;
+						cHeight = c.offsetHeight;
+
+						var	talesize = 20;
+						var talestep = Math.min(cWidth,cHeight)/talesize;
+						
+						
+						ctx.fillStyle = '#000000';
+						ctx.font = layout.value_size+"px Arial";
+						ctx.textAlign = "center";  
+						ctx.fillText(
+							lastrow+"/"+rowcount,	
+							pixel(10),
+							pixel(10)
+						);*/
+                        me.paint( $element,layout);
                } );
      }
+	 else{
+	 	console.log(TotalData);
 		ss4 = TotalData;
 	
 		var app;
@@ -639,7 +675,7 @@ define( ["qlik", "css!./VennDiagram.css"],
 		
 		
 		//var data = layout.qHyperCube.qDataPages[0].qMatrix;
-		var label = layout.qHyperCube.qMeasureInfo;
+	//	var label = layout.qHyperCube.qMeasureInfo;
 		
 		/*qtdRows = this.backendApi.getRowCount();
 		maxPage = Math.floor((qtdRows-3300)/1);
@@ -693,6 +729,7 @@ define( ["qlik", "css!./VennDiagram.css"],
 	
 	ss1 = setList;
 	ss2 = Venn;
+		}
     }
   }
 
