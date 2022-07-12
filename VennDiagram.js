@@ -108,6 +108,21 @@ define( ["qlik", "css!./VennDiagram.css"],
 									label: "Border Width",
 									defaultValue: 1
 								},
+								MySwitchProp2: {
+									type: "boolean",
+									component: "switch",
+									label: "Background Color",
+									ref: "use_background",
+									options: [{
+										value: true,
+										label: "Yes"
+									}, {
+										value: false,
+										label: "No"
+									}],
+
+									defaultValue: false
+								},
 								MySwitchProp: {
 									type: "boolean",
 									component: "switch",
@@ -416,11 +431,23 @@ define( ["qlik", "css!./VennDiagram.css"],
 				ctx.strokeStyle = layout.color_1.color;
 	   			ctx.arc(pixelX(10),pixelY(9), pixel(6.5), 0, 2 * Math.PI);
        	   		ctx.stroke();
+				if(layout.use_background){
+					ctx.globalAlpha = 0.1;
+					ctx.fillStyle = layout.color_1.color;
+					ctx.fill();
+					ctx.globalAlpha = 1;
+				}
 				
 				ctx.beginPath();
 				ctx.strokeStyle = layout.color_2.color;
 	   			ctx.arc(pixelX(16),pixelY(9), pixel(6.5), 0, 2 * Math.PI);
        	   		ctx.stroke();
+				if(layout.use_background){
+					ctx.globalAlpha = 0.1;
+					ctx.fillStyle = layout.color_2.color;
+					ctx.fill();
+					ctx.globalAlpha = 1;
+				}
 				
 				ctx.lineWidth = 1;
 			}
@@ -431,16 +458,34 @@ define( ["qlik", "css!./VennDiagram.css"],
 				ctx.strokeStyle = layout.color_1.color;
 	   			ctx.arc(pixelX(9),pixelY(7), pixel(5.5), 0, 2 * Math.PI);
        	   		ctx.stroke();
+				if(layout.use_background){
+					ctx.globalAlpha = 0.1;
+					ctx.fillStyle = layout.color_1.color;
+					ctx.fill();
+					ctx.globalAlpha = 1;
+				}
 				
 				ctx.beginPath();
 				ctx.strokeStyle = layout.color_2.color;
 	   			ctx.arc(pixelX(15),pixelY(7), pixel(5.5), 0, 2 * Math.PI);
        	   		ctx.stroke();
+				if(layout.use_background){
+					ctx.globalAlpha = 0.1;
+					ctx.fillStyle = layout.color_2.color;
+					ctx.fill();
+					ctx.globalAlpha = 1;
+				}
 				
 				ctx.beginPath();
 				ctx.strokeStyle = layout.color_3.color;
 	   			ctx.arc(pixelX(12),pixelY(13.06), pixel(5.5), 0, 2 * Math.PI);
        	   		ctx.stroke();
+				if(layout.use_background){
+					ctx.globalAlpha = 0.1;
+					ctx.fillStyle = layout.color_3.color;
+					ctx.fill();
+					ctx.globalAlpha = 1;
+				}
 				
 				ctx.lineWidth = 1;
 				
@@ -739,6 +784,7 @@ define( ["qlik", "css!./VennDiagram.css"],
 		
 		
 		//ss = data;
+		
 
 		if(TotalData[0].length == 2){
 			considerValue = false;
@@ -746,6 +792,20 @@ define( ["qlik", "css!./VennDiagram.css"],
 		
 	
 		calculateVenn(TotalData);
+		
+		if(setList.length < 2){
+									
+			ctx.fillStyle = '#8a8a8a';
+			ctx.font = "18px Arial";
+			ctx.textAlign = "center";  
+			ctx.fillText(
+					"Must contain at least 2 Sets",	
+					pixelX(10),
+					pixelY(10)
+						);
+		
+		
+		}
 		
 		draw();
 		
