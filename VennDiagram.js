@@ -152,7 +152,7 @@ define( ["qlik", "css!./VennDiagram.css"],
     template: template,
     paint: function($element, layout) {
 		
-		$element.empty();
+		//$element.empty();
 	
 		function pixel(x){
 			cWidth = c.offsetWidth;
@@ -185,6 +185,30 @@ define( ["qlik", "css!./VennDiagram.css"],
 			var talestep = Math.min(cWidth,cHeight)/talesize;
 			
 			translate = Math.max(0,cHeight - cWidth)/2;
+			
+			
+			return x*talestep + translate; 
+		}
+		
+		function pixelX_local(x,w,h){
+			
+
+			var	talesize = 20;
+			var talestep = Math.min(w,h)/talesize;
+			
+			translate = Math.max(0,w - h)/2;
+			
+			
+			return x*talestep + translate - 30; 
+		}
+		
+		function pixelY_local(x,w,h){
+			
+
+			var	talesize = 20;
+			var talestep = Math.min(w,h)/talesize;
+			
+			translate = Math.max(0,h - w)/2;
 			
 			
 			return x*talestep + translate; 
@@ -384,6 +408,21 @@ define( ["qlik", "css!./VennDiagram.css"],
 			
 			
 		}
+		function drawLoading(perc){
+			console.log("perc:"+perc);
+			ctx.clearRect(0, 0, 3000, 3000);
+			ctx.fillStyle = '#8a8a8a';
+			ctx.font = "21px Arial";
+			ctx.textAlign = "center";  
+			ctx.fillText(
+				"Loading... ("+(perc)+" %)",	
+				pixelX(10),
+				pixelY(10)
+						);
+			ctx.textAlign = "left";
+		}
+		
+		
 		function buildVenn(){
 		
 			if(setList.length == 2){
@@ -393,15 +432,23 @@ define( ["qlik", "css!./VennDiagram.css"],
 				Venn.push(Intersect2(0,1));
 			}
 			if(setList.length == 3){
+				drawLoading("50");
 				Venn.push(OnlySet(0));
+				drawLoading("55");
 				Venn.push(OnlySet(1));
+				drawLoading("60");
 				Venn.push(OnlySet(2));
+				drawLoading("65");
 				
 				Venn.push(Intersect2(0,1));
+				drawLoading("72");
 				Venn.push(Intersect2(0,2));
+				drawLoading("79");
 				Venn.push(Intersect2(1,2));
+				drawLoading("86");
 				
 				Venn.push(Intersect3(0,1,2));
+				drawLoading("97");
 				
 			}
 			
@@ -423,6 +470,8 @@ define( ["qlik", "css!./VennDiagram.css"],
 			
 		
 		}
+		
+		
 		
 		function drawCircles(){
 			if(setList.length == 2){
@@ -639,7 +688,7 @@ define( ["qlik", "css!./VennDiagram.css"],
 				addItemInSet(matrix[i][0],matrix[i][1],rowValue);
 			
 			}
-			
+			if(setList.length < 2){return;}
 			buildVenn();
 			
 			
@@ -664,7 +713,7 @@ define( ["qlik", "css!./VennDiagram.css"],
 			} );
 			TotalData.push(newdata);
      });
-	// var rowcount = this.backendApi.getRowCount();
+	 var rowcount = this.backendApi.getRowCount();
      if(this.backendApi.getRowCount() > lastrow +1){
              //we havent got all the rows yet, so get some more, 1000 rows
 			 console.log("rownum: "+lastrow);
@@ -676,25 +725,18 @@ define( ["qlik", "css!./VennDiagram.css"],
                 }];
                this.backendApi.getData( requestPage ).then( function ( dataPages ) {
                         //when we get the result trigger paint again
-						/*var venn_canvas = document.createElement("canvas");
+						$element.empty();
+						var venn_canvas = document.createElement("canvas");
 						venn_canvas.setAttribute("class","venn_canvas_class");
 						var hashId = Math.floor(Math.random() * 100000);
 						venn_canvas.setAttribute("id","venn_canvas"+hashId);
-
-
 						$element.append( venn_canvas );
-
 						var c = document.getElementById("venn_canvas"+hashId);
-
-
 						c.setAttribute("width",c.offsetWidth);
 						c.setAttribute("height",c.offsetHeight);
-
 						var ctx = c.getContext("2d");
-
 						cWidth = c.offsetWidth;
 						cHeight = c.offsetHeight;
-
 						var	talesize = 20;
 						var talestep = Math.min(cWidth,cHeight)/talesize;
 						
@@ -702,15 +744,19 @@ define( ["qlik", "css!./VennDiagram.css"],
 						ctx.fillStyle = '#000000';
 						ctx.font = layout.value_size+"px Arial";
 						ctx.textAlign = "center";  
+						ctx.fillStyle = '#8a8a8a';
+						ctx.font = "21px Arial";
+						ctx.textAlign = "center";  
 						ctx.fillText(
-							lastrow+"/"+rowcount,	
-							pixel(10),
-							pixel(10)
-						);*/
+							"Loading... ("+(Math.floor((lastrow*100)/rowcount))+" %)",	
+							pixelX_local(10,cWidth,cHeight),
+							pixelY_local(10,cWidth,cHeight)
+						);
                         me.paint( $element,layout);
                } );
      }
 	 else{
+	 	$element.empty();
 	 	console.log(TotalData);
 		ss4 = TotalData;
 	
@@ -794,7 +840,7 @@ define( ["qlik", "css!./VennDiagram.css"],
 		calculateVenn(TotalData);
 		
 		if(setList.length < 2){
-									
+			ctx.clearRect(0, 0, 3000, 3000);							
 			ctx.fillStyle = '#8a8a8a';
 			ctx.font = "18px Arial";
 			ctx.textAlign = "center";  
@@ -806,8 +852,12 @@ define( ["qlik", "css!./VennDiagram.css"],
 		
 		
 		}
+		else{
+			ctx.clearRect(0, 0, 3000, 3000);
+			draw();
+		}
 		
-		draw();
+		
 		
 
 		
